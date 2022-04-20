@@ -2,9 +2,10 @@
   "name": "forkify",
   "version": "1.0.0",
   "description": "recipe web app that allows users to search, view, modify, bookmark and add recipes.",
-  "main": "index.js",
+  "default": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/abdrahmansoltan/Forkify/issues"
   },
-  "homepage": "https://github.com/abdrahmansoltan/Forkify#readme"
+  "homepage": "https://github.com/abdrahmansoltan/Forkify#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.4.1",
+    "parcel": "^2.4.1",
+    "sass": "^1.50.1"
+  },
+  "dependencies": {
+    "core-js": "^3.22.1",
+    "fractional": "^1.0.0",
+    "regenerator-runtime": "^0.13.9"
+  }
 }
