@@ -1,0 +1,19 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "recipe web app that allows users to search, view, modify, bookmark and add recipes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdrahmansoltan/Forkify.git"
+  },
+  "author": "Abdelrahman Soltan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdrahmansoltan/Forkify/issues"
+  },
+  "homepage": "https://github.com/abdrahmansoltan/Forkify#readme"
+}
