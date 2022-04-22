@@ -1,3 +1,6 @@
+import { API_URL } from './config.js';
+import { getJSON } from './helpers.js';
+
 export const state = {
   recipe: {},
 };
@@ -5,15 +8,9 @@ export const state = {
 // this function won't return anything it will just update the state
 export const loadRecipe = async function (id) {
   try {
-    const res = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
-    );
+    const data = await getJSON(`${API_URL}/${id}`);
 
-    const data = await res.json(); // get the body of the response in "json-format"
-
-    // in case of error retern the error-message from the server
-    if (!res.ok) throw new Error(`${data.message} (${data.status})`);
-
+    
     const { recipe } = data.data;
 
     // update the state
