@@ -16,6 +16,7 @@ export const getJSON = async function (url) {
     // to prevent fetching from taking forever
     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
 
+    console.log(res);
     const data = await res.json(); // get the body of the response in "json-format"
 
     // in case of error retern the error-message from the server

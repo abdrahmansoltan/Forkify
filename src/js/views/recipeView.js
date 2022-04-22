@@ -6,6 +6,8 @@ import { Fraction } from 'fractional'; // library used to convert numbers to fra
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = 'No recipes found for your query. Please try again!';
+  #message = '';
 
   render(data) {
     this.#data = data;
@@ -28,7 +30,39 @@ class RecipeView {
           </svg>
         </div>`;
 
-    this.#parentElement.innerHTML = '';
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // default error message if none was passed as a message
+  renderError(message = this.#errorMessage) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // success message
+  renderMessage(message = this.#message) {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
@@ -139,6 +173,14 @@ class RecipeView {
       </div>
     </li>
   `;
+  }
+
+  // pub/sub pattern
+  // showing specific recipe based on hashchange event or when page loads
+  addHandlerRender(handler) {
+    // "hashchange" is an event when clicking on a link so the hash changes
+    // "load" is an event so that the recipe shows automatically when loading the page without selecting a recipe again
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 }
 

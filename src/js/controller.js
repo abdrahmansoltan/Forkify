@@ -34,11 +34,13 @@ const controlRecipes = async function () {
     // (2) Render Recipe
     recipeView.render(recipe);
   } catch (error) {
-    alert(error);
+    recipeView.renderError();
   }
 };
 
-// showing specific recipe based on hashchange event or when page loads
-['hashchange', 'load'].forEach(event => {
-  window.addEventListener(event, controlRecipes);
-});
+// this runs at first so that the publisher notify the subscribersw
+const init = function () {
+  // pub/sub pattern
+  recipeView.addHandlerRender(controlRecipes);
+};
+init();
