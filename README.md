@@ -33,6 +33,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#features">Features</a></li>
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#flowchart">Flowchart</a></li>
         <li><a href="#architecture">Architecture</a></li>
@@ -42,6 +43,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#tree-structure">Tree Structure</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -56,6 +58,8 @@
 ![Forkify preview](./src/img/preview.PNG)
 
 Forkify is a recipe web app using the [Forkify API](https://forkify-api.herokuapp.com/v2) to allow users to search, view, modify, bookmark and add recipes.
+
+- Available search queries : [Queries](https://forkify-api.herokuapp.com/phrases.html)
 
 ### Features
 
