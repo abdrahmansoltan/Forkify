@@ -4,9 +4,11 @@ import searchView from './views/searchView.js';
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView';
+import addRecipeView from './views/addRecipeView';
 
 import 'core-js/stable'; // to ensure that most browsers support this app
 import 'regenerator-runtime/runtime'; // to ensure that most browsers support this app
+import { MODAL_CLOSE_SEC } from './config';
 
 const controlRecipes = async function () {
   try {
@@ -86,6 +88,39 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+// pub/sub pattern
+// it's an async funciton as we wait for the formData object which uses (fetch())
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    // Show loading spinner
+    addRecipeView.renderSpinner();
+
+    // Upload the new recipe data
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    // Render recipe
+    recipeView.render(model.state.recipe);
+
+    // Success message
+    addRecipeView.renderMessage();
+
+    // Render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change ID in URL (change url without reloading the page)
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    // Close form window
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error('💥', err);
+    addRecipeView.renderError(err.message);
+  }
+};
+
 // this runs at first so that the publisher notify the subscribersw
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
@@ -97,5 +132,6 @@ const init = function () {
   paginationView.addHandlerClick(controlPagination);
 };
 recipeView.addHandlerAddBookmark(controlAddBookmark);
+addRecipeView.addHandlerUpload(controlAddRecipe);
 
 init();

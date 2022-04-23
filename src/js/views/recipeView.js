@@ -1,16 +1,51 @@
+import View from './view.js';
+
 //-----------import icons as its location is change when Bundling-----------//
 // import icons from '../img/icons.svg'; // Parcel 1
 import icons from 'url:../../img/icons.svg'; // Parcel 2
+
 import { Fraction } from 'fractional'; // library used to convert numbers to fractions ( 0.5 => 1/2 )
-import View from './view';
 
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
-  _errorMessage = 'No recipes found for your query. Please try again!';
+  _errorMessage = 'We could not find that recipe. Please try another one!';
   _message = '';
 
+  // pub/sub pattern
+  addHandlerRender(handler) {
+    // "hashchange" is an event when clicking on a link so the hash changes
+    // "load" is an event so that the recipe shows automatically when loading the page without selecting a recipe again
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
+  // pub/sub pattern
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      // event delegation
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+
+      // from here we control the serving number as in the html code below we increase/decrease it by 1 in (data-update-to) attribute
+      const { updateTo } = btn.dataset; // notice the camelCase
+
+      // note : if you used (+) in the line above to convert it to number it will yield an error as you are trying to convert an (object to a number)
+
+      // (+) to convert to number here
+      if (+updateTo > 0) handler(+updateTo);
+    });
+  }
+
+  addHandlerAddBookmark(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
+    });
+  }
+
   _generateMarkup() {
-    return `<figure class="recipe__fig">
+    return `
+      <figure class="recipe__fig">
         <img src="${this._data.image}" alt="${
       this._data.title
     }" class="recipe__img" />
@@ -56,7 +91,6 @@ class RecipeView extends View {
           </div>
         </div>
 
-        
         <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
           <svg>
             <use href="${icons}#icon-user"></use>
@@ -66,21 +100,18 @@ class RecipeView extends View {
           <svg class="">
             <use href="${icons}#icon-bookmark${
       this._data.bookmarked ? '-fill' : ''
-    }">
-            </use>
+    }"></use>
           </svg>
         </button>
       </div>
 
-        <div class="recipe__ingredients">
-          <h2 class="heading--2">Recipe ingredients</h2>
-          <ul class="recipe__ingredient-list">
-            ${this._data.ingredients
-              .map(this._generateMarkupIngredient)
-              .join('')}
-        </div>
+      <div class="recipe__ingredients">
+        <h2 class="heading--2">Recipe ingredients</h2>
+        <ul class="recipe__ingredient-list">
+          ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
+      </div>
 
-        <div class="recipe__directions">
+      <div class="recipe__directions">
         <h2 class="heading--2">How to cook it</h2>
         <p class="recipe__directions-text">
           This recipe was carefully designed and tested by
@@ -95,11 +126,12 @@ class RecipeView extends View {
           target="_blank"
         >
           <span>Directions</span>
-          <svg class="search_#icon">
+          <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
         </a>
-      </div>`;
+      </div>
+    `;
   }
 
   _generateMarkupIngredient(ing) {
@@ -119,39 +151,6 @@ class RecipeView extends View {
       </div>
     </li>
   `;
-  }
-
-  // pub/sub pattern
-  // showing specific recipe based on hashchange event or when page loads
-  addHandlerRender(handler) {
-    // "hashchange" is an event when clicking on a link so the hash changes
-    // "load" is an event so that the recipe shows automatically when loading the page without selecting a recipe again
-    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
-  }
-
-  // pub/sub pattern
-  addHandlerUpdateServings(handler) {
-    this._parentElement.addEventListener('click', function (e) {
-      // event delegation
-      const btn = e.target.closest('.btn--update-servings');
-      if (!btn) return;
-
-      // from here we control the serving number as in the html code below we increase/decrease it by 1 in (data-update-to) attribute
-      const { updateTo } = btn.dataset;
-
-      // note : if you used (+) in the line above to convert it to number it will yield an error as you are trying to convert an (object to a number)
-
-      // (+) to convert to number here
-      if (+updateTo > 0) handler(+updateTo);
-    });
-  }
-
-  addHandlerAddBookmark(handler) {
-    this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--bookmark');
-      if (!btn) return;
-      handler();
-    });
   }
 }
 
