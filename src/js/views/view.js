@@ -10,7 +10,7 @@ Notes:
 export default class View {
   _data;
 
-  render(data) {
+  render(data, render = true) {
     // Gaurd claus : if (no data) or (data is an empty array) => render error message from error-function
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
@@ -19,6 +19,9 @@ export default class View {
     this._data = data;
 
     const markup = this._generateMarkup();
+
+    if (!render) return markup;
+
     // 1- empty the content of the recipe container
     this._clear();
     // 2- display markup
@@ -112,4 +115,4 @@ export default class View {
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
-} 
+}

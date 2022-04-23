@@ -57,14 +57,20 @@ class RecipeView extends View {
         </div>
 
         
-          <div class="recipe__user-generated">
-          </div>
-          <button class="btn--round">
-            <svg class="">
-              <use href="${icons}#icon-bookmark-fill"></use>
-            </svg>
-          </button>
+        <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
+          <svg>
+            <use href="${icons}#icon-user"></use>
+          </svg>
         </div>
+        <button class="btn--round btn--bookmark">
+          <svg class="">
+            <use href="${icons}#icon-bookmark${
+      this._data.bookmarked ? '-fill' : ''
+    }">
+            </use>
+          </svg>
+        </button>
+      </div>
 
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
@@ -131,12 +137,20 @@ class RecipeView extends View {
       if (!btn) return;
 
       // from here we control the serving number as in the html code below we increase/decrease it by 1 in (data-update-to) attribute
-      const { updateTo } = btn.dataset; 
+      const { updateTo } = btn.dataset;
 
       // note : if you used (+) in the line above to convert it to number it will yield an error as you are trying to convert an (object to a number)
 
       // (+) to convert to number here
       if (+updateTo > 0) handler(+updateTo);
+    });
+  }
+
+  addHandlerAddBookmark(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
     });
   }
 }
