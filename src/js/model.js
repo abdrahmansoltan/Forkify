@@ -68,3 +68,14 @@ export const getSearchResultsPage = function (page = state.search.page) {
 
   return state.search.results.slice(start, end);
 };
+
+export const updateServings = function (newServings) {
+  state.recipe.ingredients.forEach(ing => {
+    // changing the ingredients' quantity will change the serving by this formula :
+    ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+    // newQt = oldQt * newServings / oldServings    // ex : (2 * 8 / 4) = 4
+  });
+
+  // we do this after the formula so that we can first use the old serving value in the formula
+  state.recipe.servings = newServings;
+};

@@ -122,6 +122,23 @@ class RecipeView extends View {
     // "load" is an event so that the recipe shows automatically when loading the page without selecting a recipe again
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
+
+  // pub/sub pattern
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      // event delegation
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+
+      // from here we control the serving number as in the html code below we increase/decrease it by 1 in (data-update-to) attribute
+      const { updateTo } = btn.dataset; 
+
+      // note : if you used (+) in the line above to convert it to number it will yield an error as you are trying to convert an (object to a number)
+
+      // (+) to convert to number here
+      if (+updateTo > 0) handler(+updateTo);
+    });
+  }
 }
 
 // we export the "instance" and not the "class" as if we exported the class it may create multiple classes which complicate things
