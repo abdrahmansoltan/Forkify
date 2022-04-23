@@ -16,6 +16,9 @@ const controlRecipes = async function () {
     // Display rotating spinner until results arrive
     recipeView.renderSpinner();
 
+    // 0) Update results view to mark selected search result
+    resultsView.update(model.getSearchResultsPage());
+
     // (1) loading the recipe
     await model.loadRecipe(id); // (it's an async function so it'll return a promise so we must await it)
     // now we can use the "state"
